@@ -36,7 +36,7 @@ public class Task {
     }
 
     public String getTaskStatusAsString() {
-        return this.taskStatus ? "Completed" : "Not completed";
+        return this.taskStatus? "Completed" : "Not completed";
     }
 
     public String getPriorityAsString() {
