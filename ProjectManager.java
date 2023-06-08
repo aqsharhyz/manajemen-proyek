@@ -50,8 +50,9 @@ public class ProjectManager {
         StringBuilder sb = new StringBuilder();
         sb.append("List of projects:\n");
         for (int i = 0; i < nProjects; i++) {
-            sb.append((i+1) + ". " + projects.get(i).get(0).getProjectName() + "   " + projects.get(i).get(0).getProjectStatusAsString() + "\n");
-            sb.append("   " + projects.get(i).get(0).getProjectDescription() + "\n\n");
+            Project temp = projects.get(i).get(0);
+            sb.append((i+1) + ". " + temp.getProjectName() + "   " + temp.getProjectStatusAsString() + "\n");
+            sb.append("   " + temp.getProjectDescription() + "\n\n");
         }
         return sb.toString();
     }
@@ -62,16 +63,14 @@ public class ProjectManager {
             return;
         }
     
-        int lastIndex = nProjects - 1; // Indeks elemen terakhir
-        Project lastProject = projects.get(lastIndex).get(0); // Elemen terakhir di indeks sebelum penghapusan
+        int lastIndex = nProjects - 1;
+        Project lastProject = projects.get(lastIndex).get(0);
         swapValues(projects, id, lastIndex);
     
-        // Perbarui peta nama ke ID
         String projectName = projects.get(id).get(0).getProjectName();
         String lastProjectName = lastProject.getProjectName();
         swapValues(nameToIdMap, projectName, lastProjectName);
     
-        // Hapus elemen terakhir
         projects.remove(lastIndex);
         nameToIdMap.remove(lastProjectName);
     

@@ -1,20 +1,3 @@
-// Struktur data: graf
-// Sifat graf: acyclic, weighted, directed
-// Representasi graf: adjacency list
-// Algoritma: dfs untuk melakukan topological sort
-
-// Fitur utama:
-// Add project & add task = add vertex
-// Add dependency = add edge
-// Delete project & delete task = delete vertex
-// Delete dependency = delete edge
-// Select project = select vertex
-// Get list of projects = get list of vertices
-
-// Fitur tambahan:
-// Edit project and task property = edit vertex property
-// Display project and task detail
-
 import java.util.*;
 
 public class RunProjectManager {
@@ -33,8 +16,7 @@ public class RunProjectManager {
             System.out.println("6. Select project");
             System.out.println("7. Get list of projects");
             System.out.println("8. The work order of the projects");
-            System.out.println("9. Summary of projects");
-            System.out.println("10. Exit");
+            System.out.println("9. Exit");
             System.out.print("Input your choice: ");
 
             int choice = sc.nextInt();
@@ -44,47 +26,35 @@ public class RunProjectManager {
             switch(choice) {
                 case 1:
                     inputCreateProjectWithDependency(sc, pm);
-                    waitForAnyKey(sc);
                     break;
                 case 2:
                     inputCreateProjectWithoutDependency(sc, pm);
-                    waitForAnyKey(sc);
                     break;
                 case 3:
                     inputAddDependency(sc, pm);
-                    waitForAnyKey(sc);
                     break;
                 case 4:
                     inputDeleteProject(sc, pm);
-                    waitForAnyKey(sc);
                     break;
                 case 5:
                     inputDeleteDependency(sc, pm);
-                    waitForAnyKey(sc);
                     break;
                 case 6:
                     inputSelectProject(sc, pm);
-                    waitForAnyKey(sc);
                     break;
                 case 7:
                     System.out.println(pm.getListProjects());
-                    waitForAnyKey(sc);
                     break;
                 case 8:
                     displayProjectsOrder(pm);
-                    waitForAnyKey(sc);
                     break;
                 case 9:
-                    displaySummary(pm);
-                    waitForAnyKey(sc);
-                    break;
-                case 10:
                     System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid input.");
-                    waitForAnyKey(sc);
             }
+            waitForAnyKey(sc);
         }
     }
 
@@ -171,44 +141,6 @@ public class RunProjectManager {
             }
             System.out.println();
         }
-    }
-
-    public static void displaySummary(ProjectManager pm) {
-        System.out.println("Total projects: " + pm.nProjects);
-        
-    //     for(Project pr : pm.projects.values().get(0)){
-    //         System.out.println("Project name: " + pr.getProjectName());
-    //         System.out.println("Total tasks: " + pr.get);
-    //         System.out.println("Total weight: " + pr.totalProjectWeight);
-    //         System.out.println("Total completed tasks: " + pr.getCompletedTasks());
-    //         System.out.println("Total uncompleted tasks: " + pr.getUncompletedTasks());
-    //         System.out.println("Total completed weight: " + pr.getCompletedWeight());
-    //         System.out.println("Total uncompleted weight: " + pr.getUncompletedWeight());
-    //         System.out.println("Total completed percentage: " + pr.getCompletedPercentage());
-    //         System.out.println("Total uncompleted percentage: " + pr.getUncompletedPercentage());
-    //         System.out.println();
-    //         if(pr.getProjectStatus()){
-    //             System.out.println("Project status: Completed");
-    //         } else
-    //             System.out.println("Project status: Not completed");
-    //     }
-    // Set<List<Project>> projects = pm.projects.values();
-    // // for(Project p : pm.projects) {
-    // // System.out.println("Project name: " + p.getProjectName());
-    // // System.out.println("Total tasks: " + p.nTasks);
-    // // System.out.println("Total weight: " + p.totalProjectWeight);
-    // // System.out.println("Total completed tasks: " + p.getCompletedTasks());
-    // // System.out.println("Total uncompleted tasks: " + p.getUncompletedTasks());
-    // // System.out.println("Total completed weight: " + p.getCompletedWeight());
-    // // System.out.println("Total uncompleted weight: " +
-    // p.getUncompletedWeight());
-    // // System.out.println("Total completed percentage: " +
-    // p.getCompletedPercentage());
-    // // System.out.println("Total uncompleted percentage: " +
-    // p.getUncompletedPercentage());
-    // // System.out.println();
-    // // }
-    // System.out.println("Total tasks: " + pm.getTotalTasks());
     }
 
     public static void printProjectMenu(Scanner sc, Project p) {
@@ -445,7 +377,7 @@ public class RunProjectManager {
                     waitForAnyKey(sc);
                     break;
                 case 6:
-                    displayTaskDetail(p, t);
+                    System.out.println(t.displayTaskDetail());
                     waitForAnyKey(sc);
                     break;
                 case 7:
@@ -454,15 +386,6 @@ public class RunProjectManager {
                     System.out.println("Invalid input.");
             }
         }
-    }
-
-    public static void displayTaskDetail(Project p, Task t){
-        // System.out.println(t.displayTaskDetail());
-        // System.out.println("Task dependency: ");
-        // ArrayList<Task> temp = p.getTaskDependencies(t);
-        // for(Task ts : temp){
-        //     System.out.println("-> " + ts.getTaskName());
-        // }
     }
 
     private static void clearTerminal() {
@@ -477,7 +400,7 @@ public class RunProjectManager {
         System.out.println("\nTekan tombol apapun untuk melanjutkan...");
 
         try {
-            sc.nextLine(); // Menunggu sampai pengguna memencet tombol apapun
+            sc.nextLine();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -485,13 +408,9 @@ public class RunProjectManager {
 
     public static void main(String[] args) {
         ProjectManager pm = new ProjectManager();
-        // Menambahkan proyek ke dalam manajer proyek
-        pm.addProject(new Project("Pengembangan Aplikasi Manajemen Proyek Kolaboratif", "helo"));
 
-        // Mendapatkan objek proyek berdasarkan nama
+        pm.addProject(new Project("Pengembangan Aplikasi Manajemen Proyek Kolaboratif", "deskripsi"));
         Project project = pm.getProjectByName("Pengembangan Aplikasi Manajemen Proyek Kolaboratif");
-
-        // Menambahkan tugas-tugas ke dalam proyek
         project.addTask(new Task("Analisis Kebutuhan Pengguna",
                 "Melakukan analisis kebutuhan pengguna untuk mengidentifikasi fitur-fitur yang diperlukan dalam aplikasi",
                 1, 1, false));
@@ -519,9 +438,7 @@ public class RunProjectManager {
         project.addDependency("Integrasi dengan Alat Kolaborasi", "Implementasi Fitur Manajemen Tugas");
 
         // Menambahkan proyek baru ke dalam manajer proyek
-        pm.addProject(new Project("Proyek Memasak", "apa hayo"));
-
-        // Mendapatkan objek proyek berdasarkan nama
+        pm.addProject(new Project("Proyek Memasak", "deskripsi 1"));
         Project cookingProject = pm.getProjectByName("Proyek Memasak");
 
         // Menambahkan tugas-tugas ke dalam proyek memasak
@@ -539,13 +456,7 @@ public class RunProjectManager {
         cookingProject.addDependency("Memasak", "Persiapan Bahan");
         cookingProject.addDependency("Penyajian", "Memasak");
 
-        cookingProject.deleteDependency("Belanja Bahan", "Mencari Resep");
-        cookingProject.deleteDependency("Persiapan Bahan", "Belanja Bahan");
-        cookingProject.deleteDependency("Memasak", "Persiapan Bahan");
-        cookingProject.deleteDependency("Penyajian", "Memasak");
-
-        // Menambahkan proyek baru ke dalam manajer proyek
-        pm.addProject(new Project("Proyek Kompleks", "siap pak"));
+        pm.addProject(new Project("Proyek Kompleks", "deskripsi"));
 
         // Mendapatkan objek proyek berdasarkan nama
         Project complexProject = pm.getProjectByName("Proyek Kompleks");
@@ -574,7 +485,7 @@ public class RunProjectManager {
         pm.addDependency("Proyek Memasak", "Pengembangan Aplikasi Manajemen Proyek Kolaboratif");
         pm.addDependency("Pengembangan Aplikasi Manajemen Proyek Kolaboratif", "Proyek Kompleks");
         // Menambahkan proyek baru ke dalam manajer proyek
-        pm.addProject(new Project("Proyek Teknologi", "halo semua"));
+        pm.addProject(new Project("Proyek Teknologi", "deskripsi"));
 
         // Mendapatkan objek proyek berdasarkan nama
         Project techProject = pm.getProjectByName("Proyek Teknologi");
@@ -605,7 +516,7 @@ public class RunProjectManager {
         techProject.addDependency("Pemeliharaan dan Pembaruan", "Peluncuran Sistem");
 
         // Menambahkan proyek baru ke dalam manajer proyek
-        pm.addProject(new Project("Proyek Bisnis", "semoga berhasil"));
+        pm.addProject(new Project("Proyek Bisnis", "deskripsi"));
 
         // Mendapatkan objek proyek berdasarkan nama
         Project bisnisProject = pm.getProjectByName("Proyek Bisnis");
