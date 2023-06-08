@@ -11,24 +11,13 @@ public class ProjectManager {
         nameToIdMap = new HashMap<>();
         nProjects = 0;
     }
-    // Methods:
-    // createProject(projectID, name, description): Membuat proyek baru
-    // deleteProject(projectID): Menghapus proyek berdasarkan ID
-    // getProjects(): Mendapatkan daftar proyek yang dikelola
-    // getProjectByID(projectID): Mendapatkan proyek berdasarkan ID
-    // getProjectByName(projectName): Mendapatkan proyek berdasarkan nama
-    // addTaskToProject(projectID, task): Menambahkan tugas ke dalam proyek
-    // removeTaskFromProject(projectID, task): Menghapus tugas dari proyek
-    // getTasksInProject(projectID): Mendapatkan daftar tugas dalam proyek
-    // getTasksByPriority(projectID, priority): Mendapatkan daftar tugas dalam proyek berdasarkan prioritas
-    // getTasksByWeight(projectID, weight): Mendapatkan daftar tugas dalam proyek berdasarkan bobot
-    // getDependenciesOfTaskInProject(projectID, task): Mendapatkan daftar tugas dependensi dari tugas dalam proyek
 
     public void addProject(Project newProject) {
         projects.put(nProjects, new ArrayList<>());
         newProject.setProjectID(nProjects);
         projects.get(nProjects).add(newProject);
         nameToIdMap.put(newProject.getProjectName(), nProjects++);
+        System.out.println(newProject.displayProjectDetail());
     }
 
     public void addDependency(String projectName, String dependencyName) {
@@ -57,17 +46,26 @@ public class ProjectManager {
         return projects.get(getProjectIdByName(projectName)).get(0);
     }
 
-    public String getProjetcsName() {
+    public String getListProjects() {
         StringBuilder sb = new StringBuilder();
         sb.append("List of projects:\n");
         for (int i = 0; i < nProjects; i++) {
-            sb.append((i+1) + ". " + projects.get(i).get(0).getProjectName() + "\n");
+            sb.append((i+1) + ". " + projects.get(i).get(0).getProjectName() + "   " + projects.get(i).get(0).getProjectStatusAsString() + "\n");
+            sb.append("   " + projects.get(i).get(0).getProjectDescription() + "\n\n");
         }
         return sb.toString();
     }
 
-    public void deleteProject(String name){
-        int id = getProjectIdByName(name);
+    // public String projectProgress() {
+    //     int completed = 0;
+    //     for (int i = 0; i < nProjects; i++) {
+    //         if (projects.get(i).get(0).getProjectStatus()) completed++;
+    //     }
+    //     return "Project progress: " + completed + "/" + nProjects + " projects completed.";
+    // }
+
+    public void deleteProject(int id){
+        String name = getProjectNameById(id);
         if(id == -1){
             System.out.println("Project name is not found.");
             return;

@@ -6,9 +6,6 @@ public class Task {
     private String taskName;
     private String taskDescription;
     private boolean taskStatus;
-    //task dependencies
-    //private int taskDuration;
-    //apakah perlu weight antar jarak?
 
     Task(String name, String desc, int weight, int priority, boolean completed){
         this.taskName = name;
@@ -17,12 +14,6 @@ public class Task {
         this.taskPriority = priority;
         this.taskStatus = completed;
     }
-
-
-
-    // Methods:
-    // getDependencies(): Mendapatkan daftar tugas dependensi
-    // isDependentOn(task): Memeriksa apakah tugas ini memiliki dependensi pada tugas tertentu
 
     public int getTaskId() {
         return taskId;
@@ -40,9 +31,12 @@ public class Task {
        return taskPriority;
     }
 
-    public String getTaskStatus() {
-        if(this.taskStatus) return "Completed";
-        return "Not completed";
+    public boolean getTaskStatus() {
+        return taskStatus;
+    }
+
+    public String getTaskStatusAsString() {
+        return this.taskStatus ? "Completed" : "Not completed";
     }
 
     public String getPriorityAsString() {
@@ -59,23 +53,6 @@ public class Task {
                 return "Less important";
             default:
                 return "Unknown";
-        }
-    }
-
-    public int getPriorityAsInt(String priority) {
-        switch(priority){
-            case "Super important":
-                return 5;
-            case "Very important":
-                return 4;
-            case "Important":
-                return 3;
-            case "Quite important":
-                return 2;
-            case "Less important":
-                return 1;
-            default:
-                return 0;
         }
     }
 
@@ -103,23 +80,13 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
-    public void addDependency(){}
-
-    public void removeDependency(){}
-
     public String displayTaskDetail() {
         StringBuilder sb = new StringBuilder();
-        //sb.append("Task ID: "+this.taskID+"\n");
         sb.append("Task name: "+this.taskName+"\n");
         sb.append("Task description: "+this.taskDescription+"\n");
         sb.append("Task weight: "+this.taskWeight+"\n");
         sb.append("Task priority: "+this.getPriorityAsString()+"\n");
-        sb.append("Task status: "+this.getTaskStatus()+"\n");
-        //sb.append("Task dependencies: "+this.getDependencies()+"\n");
+        sb.append("Task status: "+this.getTaskStatusAsString()+"\n");
         return sb.toString();
-    }
-
-    public void printDisplay() {
-        System.out.println(this.displayTaskDetail());
     }
 }
