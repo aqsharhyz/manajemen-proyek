@@ -22,7 +22,6 @@ public class RunProjectManager {
     public static void printMainMenu(Scanner sc, ProjectManager pm) {
         
         while (true) {
-            waitForAnyKey(sc);
             clearTerminal();
             System.out.println("Welcome to Project Manager!");
             System.out.println("Main Menu: ");
@@ -174,8 +173,25 @@ public class RunProjectManager {
         }
     }
 
-    public static void displaySummary(ProjectManager pm) {}
-    // System.out.println("Total projects: " + pm.nProjects);
+    public static void displaySummary(ProjectManager pm) {
+        System.out.println("Total projects: " + pm.nProjects);
+        
+    //     for(Project pr : pm.projects.values().get(0)){
+    //         System.out.println("Project name: " + pr.getProjectName());
+    //         System.out.println("Total tasks: " + pr.get);
+    //         System.out.println("Total weight: " + pr.totalProjectWeight);
+    //         System.out.println("Total completed tasks: " + pr.getCompletedTasks());
+    //         System.out.println("Total uncompleted tasks: " + pr.getUncompletedTasks());
+    //         System.out.println("Total completed weight: " + pr.getCompletedWeight());
+    //         System.out.println("Total uncompleted weight: " + pr.getUncompletedWeight());
+    //         System.out.println("Total completed percentage: " + pr.getCompletedPercentage());
+    //         System.out.println("Total uncompleted percentage: " + pr.getUncompletedPercentage());
+    //         System.out.println();
+    //         if(pr.getProjectStatus()){
+    //             System.out.println("Project status: Completed");
+    //         } else
+    //             System.out.println("Project status: Not completed");
+    //     }
     // Set<List<Project>> projects = pm.projects.values();
     // // for(Project p : pm.projects) {
     // // System.out.println("Project name: " + p.getProjectName());
@@ -193,7 +209,7 @@ public class RunProjectManager {
     // // System.out.println();
     // // }
     // System.out.println("Total tasks: " + pm.getTotalTasks());
-    // }
+    }
 
     public static void printProjectMenu(Scanner sc, Project p) {
         while (true) {
@@ -522,6 +538,11 @@ public class RunProjectManager {
         cookingProject.addDependency("Persiapan Bahan", "Belanja Bahan");
         cookingProject.addDependency("Memasak", "Persiapan Bahan");
         cookingProject.addDependency("Penyajian", "Memasak");
+
+        cookingProject.deleteDependency("Belanja Bahan", "Mencari Resep");
+        cookingProject.deleteDependency("Persiapan Bahan", "Belanja Bahan");
+        cookingProject.deleteDependency("Memasak", "Persiapan Bahan");
+        cookingProject.deleteDependency("Penyajian", "Memasak");
 
         // Menambahkan proyek baru ke dalam manajer proyek
         pm.addProject(new Project("Proyek Kompleks", "siap pak"));

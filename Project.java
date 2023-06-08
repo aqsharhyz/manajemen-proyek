@@ -25,7 +25,6 @@ public class Project {
         newTask.setTaskId(nTasks);
         tasks.get(nTasks).add(newTask);
         nameToIdMap.put(newTask.getTaskName(), nTasks++);
-        
         checkProjectStatus();
         totalProjectWeight += newTask.getTaskWeight();
         System.out.println("Task "+newTask.getTaskName()+" has been added to this project.");
@@ -42,71 +41,47 @@ public class Project {
         tasks.get(taskId).add(tasks.get(dependencyId).get(0));
     }
 
-    public void deleteTask(int id){
-        String name = getTaskNameByID(id);
-        if(id == -1){
-            System.out.println("Task name is not found.");
+    public void deleteTask(int id) {
+        if (!tasks.containsKey(id)) {
+            System.out.println("Task not found.");
             return;
         }
+    
+        int lastIndex = nTasks - 1;
+        Task lastTask = tasks.get(lastIndex).get(0);
+    
         totalProjectWeight -= tasks.get(id).get(0).getTaskWeight();
-        tasks.remove(id);
-        nameToIdMap.remove(name);
-        Task t = tasks.get(nTasks).get(0);
-        String n = t.getTaskName();
-        //tasks.put(id, t);
-        nameToIdMap.put(n, id);
-        for(List<Task> edges: tasks.values()){
-            edges.removeIf(e -> e.getTaskName().equals(name));
+    
+        swapValues(tasks, id, lastIndex);
+    
+        String taskName = tasks.get(id).get(0).getTaskName();
+        String lastTaskName = lastTask.getTaskName();
+        swapValues(nameToIdMap, taskName, lastTaskName);
+    
+        tasks.remove(lastIndex);
+        nameToIdMap.remove(lastTaskName);
+    
+        for (List<Task> edges : tasks.values()) {
+            edges.removeIf(task -> task.getTaskId() == id);
         }
+    
         checkProjectStatus();
         nTasks--;
     }
-
-    public void deleteDependency(String taskName, String dependencyName){
-        
-    }
-
-    public boolean isAcyclic() {
-        Set<Integer> visited = new HashSet<>();
-        Set<Integer> recursionStack = new HashSet<>();
     
-        // Memeriksa setiap simpul dalam graf
-        for (Integer node : tasks.keySet()) {
-            if (!visited.contains(node)) {
-                if (isCyclicUtil(node, visited, recursionStack)) {
-                    return false; // Jika ditemukan siklus, graf bukan acyclic
-                }
-            }
+
+    public void deleteDependency(String taskName, String dependencyName) {
+        if (!nameToIdMap.containsKey(taskName) || !nameToIdMap.containsKey(dependencyName)) {
+            System.out.println("One or both tasks not found.");
+            return;
         }
-        return true; // Jika tidak ada siklus, graf adalah acyclic
+        int taskId = nameToIdMap.get(taskName);
+        int dependencyId = nameToIdMap.get(dependencyName);
+        List<Task> dependencies = tasks.get(taskId);
+        dependencies.removeIf(task -> task.getTaskId() == dependencyId);
+        System.out.println("Dependency removed.");
     }
     
-    private boolean isCyclicUtil(Integer node, Set<Integer> visited, Set<Integer> recursionStack) {
-        visited.add(node);
-        recursionStack.add(node);
-    
-        // Memeriksa setiap tetangga (simpul yang terhubung melalui tepi) dari simpul saat ini
-        for (Task neighborTask : tasks.getOrDefault(node, new ArrayList<>())) {
-            Integer neighbor = neighborTask.getTaskId();
-    
-            // Jika tetangga belum dikunjungi, memeriksa rekursif apakah ada siklus
-            if (!visited.contains(neighbor)) {
-                if (isCyclicUtil(neighbor, visited, recursionStack)) {
-                    return true; // Jika ditemukan siklus dalam rekursi, graf bukan acyclic
-                }
-            }
-            // Jika tetangga ada dalam recursion stack, maka ada siklus
-            else if (recursionStack.contains(neighbor)) {
-                return true;
-            }
-        }
-    
-        recursionStack.remove(node); // Menghapus simpul dari recursion stack setelah selesai
-        return false; // Tidak ada siklus yang ditemukan
-    }
-    
-    
-
 
     public int getProjectId() {
         return this.projectID;
@@ -169,9 +144,6 @@ public class Project {
     public Task[] getTaskByWeight(int weight) {
         return null;
     }
-
-    //ini buat ngecek task mana aja yang jadi dependency dari task yang dimaksud
-    //public Task[] getTaskDependency
 
     public Set<List<Task>> getTaskByPriority(int priority) {
         Set<List<Task>> result = new HashSet<>();
@@ -271,5 +243,14 @@ public class Project {
             sb.append(tasks.get(i).get(0).displayTaskDetail());
         }
         return sb.toString();
+    }
+
+    private static <K, V> void swapValues(Map<K, V> map, K key1, K key2){
+        V value1 = map.get(key1);
+        V value2 = map.get(key2);
+        map.remove(key1);
+        map.remove(key2);
+        map.put(key1, value2);
+        map.put(key2, value1);
     }
 }

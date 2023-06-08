@@ -56,30 +56,42 @@ public class ProjectManager {
         return sb.toString();
     }
 
-    // public String projectProgress() {
-    //     int completed = 0;
-    //     for (int i = 0; i < nProjects; i++) {
-    //         if (projects.get(i).get(0).getProjectStatus()) completed++;
-    //     }
-    //     return "Project progress: " + completed + "/" + nProjects + " projects completed.";
-    // }
-
-    public void deleteProject(int id){
-        String name = getProjectNameById(id);
-        if(id == -1){
-            System.out.println("Project name is not found.");
+    public void deleteProject(int id) {
+        if (!projects.containsKey(id)) {
+            System.out.println("Task not found.");
             return;
         }
-        projects.remove(id);
-        nameToIdMap.remove(name);
-        for(List<Project> edges : projects.values()){
-            edges.removeIf(e -> e.getProjectID() == id);
+    
+        int lastIndex = nProjects - 1; // Indeks elemen terakhir
+        Project lastProject = projects.get(lastIndex).get(0); // Elemen terakhir di indeks sebelum penghapusan
+        swapValues(projects, id, lastIndex);
+    
+        // Perbarui peta nama ke ID
+        String projectName = projects.get(id).get(0).getProjectName();
+        String lastProjectName = lastProject.getProjectName();
+        swapValues(nameToIdMap, projectName, lastProjectName);
+    
+        // Hapus elemen terakhir
+        projects.remove(lastIndex);
+        nameToIdMap.remove(lastProjectName);
+    
+        for (List<Project> edges : projects.values()) {
+            edges.removeIf(task -> task.getProjectId() == id);
         }
+
         nProjects--;
     }
 
     public void deleteDependency(String projectName, String dependencyName){
-        
+        if (!nameToIdMap.containsKey(projectName) || !nameToIdMap.containsKey(dependencyName)) {
+            System.out.println("One or both projects not found.");
+            return;
+        }
+        int projectId = nameToIdMap.get(projectName);
+        int dependencyId = nameToIdMap.get(dependencyName);
+        List<Project> dependencies = projects.get(projectId);
+        dependencies.removeIf(task -> task.getProjectId() == dependencyId);
+        System.out.println("Dependency removed.");
     }
 
     public List<Integer> topologicalSort(){
@@ -112,5 +124,14 @@ public class ProjectManager {
         }
 
         stack.push(taskId);
+    }
+
+    private static <K, V> void swapValues(Map<K, V> map, K key1, K key2){
+        V value1 = map.get(key1);
+        V value2 = map.get(key2);
+        map.remove(key1);
+        map.remove(key2);
+        map.put(key1, value2);
+        map.put(key2, value1);
     }
 }
